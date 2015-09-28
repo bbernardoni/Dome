@@ -10,6 +10,9 @@ import android.support.v4.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class SettingsFrag extends PreferenceFragment {
 
     public SettingsFrag() {
@@ -24,9 +27,10 @@ public class SettingsFrag extends PreferenceFragment {
         ab.setTitle(R.string.action_settings);
 
         addPreferencesFromResource(R.xml.preferences);
-
         PreferenceCategory calendarsCat = (PreferenceCategory)getPreferenceManager().findPreference("pref_key_calendars");
 
+        // Get Calendars from content provider
+        ArrayList<CalendarEntry> calEntries = new ArrayList<>();
         String[] returnColumns = new String[] {
                 CalendarContract.Calendars._ID,                     //0
                 CalendarContract.Calendars.ACCOUNT_NAME,            //1
@@ -36,22 +40,28 @@ public class SettingsFrag extends PreferenceFragment {
         Cursor cursor;
         ContentResolver cr = getContext().getContentResolver();
         cursor = cr.query(CalendarContract.Calendars.CONTENT_URI, returnColumns, null, null, null);
-
         while (cursor.moveToNext()){
             long calID = cursor.getLong(0);
             String displayName = cursor.getString(1);
             String accountName = cursor.getString(2);
             String accountType = cursor.getString(3);
             if(accountType.equals("com.google")){
-                CheckBoxPreference checkBoxPref = new CheckBoxPreference(getContext());
-                checkBoxPref.setTitle(accountName);
-                checkBoxPref.setSummary(displayName);
-                checkBoxPref.setDefaultValue(true);
-                checkBoxPref.setKey("pref_key_calID_"+calID);
-                calendarsCat.addPreference(checkBoxPref);
+                // Add entries to calEntries
+                calEntries.add(new CalendarEntry(calID,displayName,accountName));
             }
         }
         cursor.close();
+
+        // display all sorted entries
+        Collections.sort(calEntries);
+        for(int i=0; i<calEntries.size(); i++){
+            CheckBoxPreference checkBoxPref = new CheckBoxPreference(getContext());
+            checkBoxPref.setTitle(calEntries.get(i).accountName);
+            checkBoxPref.setSummary(calEntries.get(i).displayName);
+            checkBoxPref.setDefaultValue(true);
+            checkBoxPref.setKey("pref_key_calID_"+calEntries.get(i).calID);
+            calendarsCat.addPreference(checkBoxPref);
+        }
     }
 
 }

@@ -2,6 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/pref_calendars_title"
-        android:key="pref_key_calendars">
-    </PreferenceCategory>
+        android:key="pref_key_calendars"/>
+
 </PreferenceScreen>
