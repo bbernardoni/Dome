@@ -9,6 +9,7 @@ import android.provider.CalendarContract;
 import android.support.v4.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,21 +35,20 @@ public class SettingsFrag extends PreferenceFragment {
         String[] returnColumns = new String[] {
                 CalendarContract.Calendars._ID,                     //0
                 CalendarContract.Calendars.ACCOUNT_NAME,            //1
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,   //2
-                CalendarContract.Calendars.ACCOUNT_TYPE             //3
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME    //2
         };
         Cursor cursor;
         ContentResolver cr = getContext().getContentResolver();
-        cursor = cr.query(CalendarContract.Calendars.CONTENT_URI, returnColumns, null, null, null);
+        String selection = CalendarContract.Calendars.ACCOUNT_TYPE + " = ?";
+        String[] selectionArgs = new String[] {"com.google"};
+        cursor = cr.query(CalendarContract.Calendars.CONTENT_URI, returnColumns, selection, selectionArgs, null);
         while (cursor.moveToNext()){
             long calID = cursor.getLong(0);
             String displayName = cursor.getString(1);
             String accountName = cursor.getString(2);
-            String accountType = cursor.getString(3);
-            if(accountType.equals("com.google")){
-                // Add entries to calEntries
-                calEntries.add(new CalendarEntry(calID,displayName,accountName));
-            }
+
+            // Add entries to calEntries
+            calEntries.add(new CalendarEntry(calID,displayName,accountName));
         }
         cursor.close();
 

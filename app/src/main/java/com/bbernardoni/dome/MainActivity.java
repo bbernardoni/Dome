@@ -88,23 +88,41 @@ public class MainActivity extends AppCompatActivity
 
     private void listCalendars(){
         String[] returnColumns = new String[] {
-                CalendarContract.Calendars._ID,                     //0
-                CalendarContract.Calendars.ACCOUNT_NAME,            //1
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,   //2
-                CalendarContract.Calendars.ACCOUNT_TYPE             //3
+                CalendarContract.Events.CALENDAR_ID,
+                CalendarContract.Events.TITLE,
+                CalendarContract.Events.EVENT_LOCATION,
+                CalendarContract.Events.DESCRIPTION,
+                CalendarContract.Events.DTSTART,
+                CalendarContract.Events.DTEND,
+                CalendarContract.Events.EVENT_TIMEZONE,
+                CalendarContract.Events.EVENT_END_TIMEZONE,
+                CalendarContract.Events.DURATION,
+                CalendarContract.Events.ALL_DAY,
+                CalendarContract.Events.RRULE,
+                CalendarContract.Events.RDATE
         };
 
         Cursor cursor;
         ContentResolver cr = getContentResolver();
 
-        cursor = cr.query(CalendarContract.Calendars.CONTENT_URI, returnColumns, null, null, null);
+        cursor = cr.query(CalendarContract.Events.CONTENT_URI, returnColumns, null, null, null);
 
         while (cursor.moveToNext()){
-            long calID = cursor.getLong(0);
-            String displayName = cursor.getString(1);
-            String accountName = cursor.getString(2);
-            String accountType = cursor.getString(3);
-            Log.i("listCals", "ID="+calID + " DN="+displayName + " AN="+accountName + " AT="+accountType);
+            int calID = cursor.getInt(0);
+            String title = cursor.getString(1);
+            String eventLocation = cursor.getString(2);
+            String description = cursor.getString(3);
+            long dtstart = cursor.getLong(4);
+            long dtend = cursor.getLong(5);
+            String eventTimezone = cursor.getString(6);
+            String eventEndTimezone = cursor.getString(7);
+            String duration = cursor.getString(8);
+            int allDay = cursor.getInt(9);
+            String rrule = cursor.getString(10);
+            String rdate = cursor.getString(11);
+            Log.i("listCals", String.format("\t%d\t%s\t%s\t%s\t%d\t%d\t%s\t%s\t%s\t%d\t%s\t%s",
+                    calID,title,eventLocation,description,dtstart,dtend,
+                    eventTimezone,eventEndTimezone,duration,allDay,rrule,rdate));
         }
         cursor.close();
     }
