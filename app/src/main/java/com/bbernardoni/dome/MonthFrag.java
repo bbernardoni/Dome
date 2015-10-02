@@ -42,7 +42,7 @@ public class MonthFrag extends Fragment {
                 monthScroller.setWeekHeight(height);
                 for (int i = 0; i < 16; i++) {
                     WeekView weekView = new WeekView(getActivity());
-                    weekView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height));
+                    weekView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
                     monthLayout.addView(weekView);
                 }
                 monthScroller.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -53,6 +53,8 @@ public class MonthFrag extends Fragment {
                     }
                 });
 
+                CalEntries calEntries = ((MainActivity) getContext()).mCalEntries;
+                monthScroller.setCalEntries(calEntries);
                 monthScroller.setMiddleMonth(Calendar.getInstance());
             }
         });

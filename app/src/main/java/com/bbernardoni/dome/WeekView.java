@@ -28,5 +28,4 @@ public class WeekView extends LinearLayout{
         inflater.inflate(R.layout.week_view, this);
     }
 
-    // Will probably need to handle listeners
 }

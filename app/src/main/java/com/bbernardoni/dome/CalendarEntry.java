@@ -1,18 +1,22 @@
 package com.bbernardoni.dome;
 
+import android.support.annotation.NonNull;
+
 public class CalendarEntry implements Comparable<CalendarEntry>{
-    long calID = 0;
+    int calID = 0;
     String displayName = "";
     String accountName = "";
+    boolean enabled = false;
 
-    CalendarEntry(long _CalID, String _DisplayName, String _AccountName){
+    CalendarEntry(int _CalID, String _DisplayName, String _AccountName, boolean _enabled){
         calID = _CalID;
         displayName = _DisplayName;
         accountName = _AccountName;
+        enabled = _enabled;
     }
 
     @Override
-    public int compareTo(CalendarEntry another) {
+    public int compareTo(@NonNull CalendarEntry another) {
         int ret = this.displayName.compareTo(another.displayName);
         if(ret != 0)
             return ret;

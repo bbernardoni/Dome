@@ -2,6 +2,8 @@ package com.bbernardoni.dome;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +11,12 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -24,9 +29,15 @@ public class MonthScroller extends ScrollView {
     private GestureDetector mGestureDetector;
     private float actionDownY = 0;
     private int weekHeight = 0;
+    private int numberOfTVs = 0;
+    private static final int WEEK_TV_HEIGHT = 45;
+    private static final int WEEK_TV_OFFSET = 61;
 
     private Calendar today;
     private Calendar focused = null;
+
+    CalEntries calEntries;
+    Context mContext;
 
     public MonthScroller(Context context) {
         super(context);
@@ -52,6 +63,7 @@ public class MonthScroller extends ScrollView {
     }
 
     private void init(Context context) {
+        mContext = context;
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);
         this.setOnTouchListener(new View.OnTouchListener() {
@@ -116,10 +128,15 @@ public class MonthScroller extends ScrollView {
 
     public void setWeekHeight(int height){
         weekHeight = height;
+        numberOfTVs = (weekHeight-WEEK_TV_OFFSET)/WEEK_TV_HEIGHT;
     }
 
     public int getWeekHeight(){
         return weekHeight;
+    }
+
+    public void setCalEntries(CalEntries _calEntries){
+        calEntries = _calEntries;
     }
 
     private void nextMonth() {
@@ -175,7 +192,9 @@ public class MonthScroller extends ScrollView {
             WeekView weekView = (WeekView) ((LinearLayout)getChildAt(0)).getChildAt(i);
             for (int j = 0; j < 7; j++) {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
-                Button btnDay = (Button)weekView.getChildAt(j);
+                LinearLayout btnLayout = (LinearLayout)weekView.getChildAt(j);
+                RelativeLayout btnDayLayout = (RelativeLayout)btnLayout.getChildAt(0);
+                TextView btnDay = (TextView)btnDayLayout.getChildAt(0);
                 if(today.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
                         today.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR)) {
                     btnDay.setTextColor(Color.BLUE);
@@ -185,6 +204,48 @@ public class MonthScroller extends ScrollView {
                     btnDay.setTextColor(Color.GRAY);
                 }
                 btnDay.setText("" + day);
+
+                // add event textview
+                btnLayout.removeViews(1, btnLayout.getChildCount()-1);
+                ArrayList<EventEntry> events = calEntries.getEventsOnDay(cal);
+                for (int k = 0; k < events.size() && k < numberOfTVs; k++) {
+                    TextView btnEvent = new TextView(mContext);
+                    btnEvent.setSingleLine();
+                    btnEvent.setText(events.get(k).title);
+                    btnEvent.setTextSize(10.0f);
+                    btnEvent.setTypeface(Typeface.DEFAULT_BOLD);
+                    btnEvent.setTextColor(Color.WHITE);
+                    LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                    llp.setMargins(0, 0, 0, 2);
+                    btnEvent.setLayoutParams(llp);
+                    btnEvent.setBackgroundResource(R.drawable.rounded_corner);
+                    ((GradientDrawable)btnEvent.getBackground()).setColor(events.get(k).dispColor);
+                    btnLayout.addView(btnEvent);
+                }
+                // display +N if there are more events that are not displayed
+                if(numberOfTVs < events.size()){
+                    TextView tvPlusN;
+                    if(btnDayLayout.getChildCount()>1){
+                        tvPlusN = (TextView)btnDayLayout.getChildAt(1);
+                    }else{
+                        tvPlusN = new TextView(mContext);
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                                RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        tvPlusN.setLayoutParams(params);
+                        tvPlusN.setTextSize(12.0f);
+                        tvPlusN.setTypeface(Typeface.DEFAULT_BOLD);
+                        tvPlusN.setTextColor(Color.WHITE);
+                        tvPlusN.setBackgroundResource(R.drawable.rounded_corner);
+                        btnDayLayout.addView(tvPlusN);
+                    }
+                    ((GradientDrawable)tvPlusN.getBackground()).setColor(btnDay.getCurrentTextColor());
+                    tvPlusN.setText("+" + (events.size() - numberOfTVs));
+                }else if(btnDayLayout.getChildCount()>1){
+                    btnDayLayout.removeViews(1, btnDayLayout.getChildCount()-1);
+                }
+
                 cal.add(Calendar.DAY_OF_MONTH, 1);
             }
         }

@@ -1,13 +1,9 @@
 package com.bbernardoni.dome;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -19,11 +15,15 @@ public class MainActivity extends AppCompatActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    public CalEntries mCalEntries = new CalEntries(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mCalEntries.initCalendars();
+        mCalEntries.initEvents();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -79,52 +79,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            listCalendars();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void listCalendars(){
-        String[] returnColumns = new String[] {
-                CalendarContract.Events.CALENDAR_ID,
-                CalendarContract.Events.TITLE,
-                CalendarContract.Events.EVENT_LOCATION,
-                CalendarContract.Events.DESCRIPTION,
-                CalendarContract.Events.DTSTART,
-                CalendarContract.Events.DTEND,
-                CalendarContract.Events.EVENT_TIMEZONE,
-                CalendarContract.Events.EVENT_END_TIMEZONE,
-                CalendarContract.Events.DURATION,
-                CalendarContract.Events.ALL_DAY,
-                CalendarContract.Events.RRULE,
-                CalendarContract.Events.RDATE
-        };
-
-        Cursor cursor;
-        ContentResolver cr = getContentResolver();
-
-        cursor = cr.query(CalendarContract.Events.CONTENT_URI, returnColumns, null, null, null);
-
-        while (cursor.moveToNext()){
-            int calID = cursor.getInt(0);
-            String title = cursor.getString(1);
-            String eventLocation = cursor.getString(2);
-            String description = cursor.getString(3);
-            long dtstart = cursor.getLong(4);
-            long dtend = cursor.getLong(5);
-            String eventTimezone = cursor.getString(6);
-            String eventEndTimezone = cursor.getString(7);
-            String duration = cursor.getString(8);
-            int allDay = cursor.getInt(9);
-            String rrule = cursor.getString(10);
-            String rdate = cursor.getString(11);
-            Log.i("listCals", String.format("\t%d\t%s\t%s\t%s\t%d\t%d\t%s\t%s\t%s\t%d\t%s\t%s",
-                    calID,title,eventLocation,description,dtstart,dtend,
-                    eventTimezone,eventEndTimezone,duration,allDay,rrule,rdate));
-        }
-        cursor.close();
     }
 
 }

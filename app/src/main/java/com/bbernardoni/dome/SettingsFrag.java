@@ -1,20 +1,17 @@
 package com.bbernardoni.dome;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceCategory;
-import android.provider.CalendarContract;
 import android.support.v4.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class SettingsFrag extends PreferenceFragment {
+
+    public static final String KEY_PREF_CALID_BASE = "pref_key_calID_";
 
     public SettingsFrag() {
     }
@@ -30,36 +27,14 @@ public class SettingsFrag extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
         PreferenceCategory calendarsCat = (PreferenceCategory)getPreferenceManager().findPreference("pref_key_calendars");
 
-        // Get Calendars from content provider
-        ArrayList<CalendarEntry> calEntries = new ArrayList<>();
-        String[] returnColumns = new String[] {
-                CalendarContract.Calendars._ID,                     //0
-                CalendarContract.Calendars.ACCOUNT_NAME,            //1
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME    //2
-        };
-        Cursor cursor;
-        ContentResolver cr = getContext().getContentResolver();
-        String selection = CalendarContract.Calendars.ACCOUNT_TYPE + " = ?";
-        String[] selectionArgs = new String[] {"com.google"};
-        cursor = cr.query(CalendarContract.Calendars.CONTENT_URI, returnColumns, selection, selectionArgs, null);
-        while (cursor.moveToNext()){
-            long calID = cursor.getLong(0);
-            String displayName = cursor.getString(1);
-            String accountName = cursor.getString(2);
-
-            // Add entries to calEntries
-            calEntries.add(new CalendarEntry(calID,displayName,accountName));
-        }
-        cursor.close();
-
         // display all sorted entries
-        Collections.sort(calEntries);
+        ArrayList<CalendarEntry> calEntries = ((MainActivity)getContext()).mCalEntries.calEntries;
         for(int i=0; i<calEntries.size(); i++){
             CheckBoxPreference checkBoxPref = new CheckBoxPreference(getContext());
             checkBoxPref.setTitle(calEntries.get(i).accountName);
             checkBoxPref.setSummary(calEntries.get(i).displayName);
             checkBoxPref.setDefaultValue(true);
-            checkBoxPref.setKey("pref_key_calID_"+calEntries.get(i).calID);
+            checkBoxPref.setKey(KEY_PREF_CALID_BASE + calEntries.get(i).calID);
             calendarsCat.addPreference(checkBoxPref);
         }
     }
