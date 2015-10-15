@@ -4,9 +4,159 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView android:id="@+id/section_label"
+    <TextView
         android:text="@string/title_day"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="12 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="1 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="2 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="3 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="4 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="5 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="6 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="7 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="8 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="9 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="10 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="11 AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="12 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="1 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="2 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="3 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="4 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="5 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="6 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="7 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="8 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="9 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="10 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:text="11 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/day_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>

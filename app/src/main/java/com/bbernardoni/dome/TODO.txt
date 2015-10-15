@@ -1,0 +1,33 @@
+Todo list
+
+CALENDAR STUFF
+move calendar provider to its own thread
+reduce month load time
+add week view
+add day view
+expanding settings frag
+make add event dialog
+make view event dialog
+make update event dialog
+setup actions
+add today action
+goto action
+year view maybe
+small month view in other views
+refresh
+sync management
+abstraction
+
+OTHER ASPECTS
+to-do interface
+alarm interface
+clock interface
+timer interface
+
+OTHER IDEAS
+better bus app
+file system/document viewer
+calculator
+band music app (met., tuner, piano, composition, ect.)
+game
+communication
